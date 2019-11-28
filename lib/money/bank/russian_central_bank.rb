@@ -24,6 +24,8 @@ class Money
         super(to, from, 1.0 / rate)
       end
 
+      alias original_get_rate get_rate
+
       def get_rate(from, to)
         update_rates if rates_expired?
         super || indirect_rate(from, to)
@@ -58,7 +60,8 @@ class Money
       end
 
       def indirect_rate(from, to)
-        get_rate('RUB', to) / get_rate('RUB', from)
+        rate = original_get_rate('RUB', to).to_f / original_get_rate('RUB', from).to_f
+        rate.nan? || !!rate.infinite? ? nil : rate
       end
 
       def local_currencies
