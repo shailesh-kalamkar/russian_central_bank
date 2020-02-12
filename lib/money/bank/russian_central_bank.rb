@@ -61,7 +61,7 @@ class Money
 
       def indirect_rate(from, to)
         rate = original_get_rate('RUB', to).to_f / original_get_rate('RUB', from).to_f
-        rate.nan? || !!rate.infinite? ? nil : rate
+        rate.nan? || !!rate.infinite? || rate == 0 ? nil : rate
       end
 
       def local_currencies
